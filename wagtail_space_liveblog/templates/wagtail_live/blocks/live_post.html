@@ -1,0 +1,14 @@
+{% load wagtailcore_tags emoji %}
+
+<div class="live-post" data-post-id="{{block_id}}">
+    <div class="live-post__meta">
+        <div class="live-post__posted_by">{{ value.posted_by }}</div>
+        <span>|</span>
+        <div class="live-post__created">{{ value.created|time:"H:i" }}</div>
+    </div>
+    <div class="live-post__content">
+        {% for block in value.content %}
+            <div class="live-post__block">{% include_block block|emojify %}</div>
+        {% endfor %}
+    </div>
+</div>

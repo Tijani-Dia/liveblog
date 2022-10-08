@@ -1,0 +1,11 @@
+*.pyc
+.DS_Store
+*.swp
+.vscode/
+/venv/
+/.venv/
+/env/
+/static/
+wagtail_space_liveblog/media/
+*.sqlite3
+/media/

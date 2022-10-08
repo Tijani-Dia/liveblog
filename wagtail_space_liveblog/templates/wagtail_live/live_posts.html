@@ -1,0 +1,23 @@
+{% load static wagtailcore_tags %}
+
+<div id="live-posts">
+    {% for post in live_posts %}
+        {% if post.value.show %}
+            <div class="live-post-wrapper">
+                {% include_block post with block_id=post.id %}
+            </div>
+        {% else %}
+            <div class="live-post-wrapper" style="display: none;">
+                {% include_block post with block_id=post.id %}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+{% csrf_token %}
+<script>
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const channelID = "{{ self.channel_id }}";
+</script>
+<script src="{% static 'wagtail_live/js/utils.js' %}"></script>
+<script src="{% static 'js/endless-pagination.js' %}"></script>

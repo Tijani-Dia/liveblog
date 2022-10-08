@@ -1,0 +1,59 @@
+version: '3.7'
+services:
+  web:
+    build:
+      context: .
+      args:
+        BUILD_ENV: dev
+      target: dev
+    environment:
+      ALLOWED_HOSTS: 127.0.0.1,0.0.0.0,localhost
+      DATABASE_URL: postgres://wagtail_space_liveblog:wagtail_space_liveblog@db:5432/wagtail_space_liveblog # pragma: allowlist secret
+      DJANGO_SETTINGS_MODULE: wagtail_space_liveblog.settings.dev
+      MEDIA_DIR: /app/media/
+      REDIS_URL: redis://redis
+      ENABLE_DJANGO_DEFENDER: 'false'
+      SECRET_KEY: local_dev_secret_key
+      SECURE_SSL_REDIRECT: 'false'
+      STATIC_DIR: /app/static/
+      STATIC_URL: /static/
+    command: tail -f /dev/null # do nothing forever - exec commands elsewhere
+    ports:
+      - 8000:8000 # runserver
+    volumes:
+      - ./.git:/app/.git:rw
+      - ./media:/app/media:rw
+      - ./public:/app/public:rw
+      - ./docker:/app/docker:rw
+      - ./wagtail_space_liveblog:/app/wagtail_space_liveblog:rw
+      - ./README.md:/app/README.md:rw
+
+      # Backend config
+      - ./manage.py:/app/manage.py:rw
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:12.3
+    expose:
+      - 5432
+    environment:
+      POSTGRES_DB: wagtail_space_liveblog
+      POSTGRES_USER: wagtail_space_liveblog
+      POSTGRES_PASSWORD: wagtail_space_liveblog # pragma: allowlist secret
+      PGDATABASE: wagtail_space_liveblog
+      PGUSER: wagtail_space_liveblog
+      PGPASSWORD: wagtail_space_liveblog # pragma: allowlist secret
+      POSTGRES_HOST_AUTH_METHOD: trust
+    logging:
+      driver: none
+    volumes:
+      - .:/app:ro
+
+  redis:
+    image: redis:6
+    expose:
+      - 6379
+    logging:
+      driver: none

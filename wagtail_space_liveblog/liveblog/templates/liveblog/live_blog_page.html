@@ -1,0 +1,44 @@
+{% extends "base.html" %} 
+
+{% load static %} 
+
+{% block body_class %}body{%endblock %} 
+
+{% block content %}
+    <header>
+        <div class="sponsors">
+            <img
+                src="{% static 'images/codered-logo.png' %}"
+                alt="Codered logo"
+            />
+            <img
+                src="{% static 'images/wharton-logo.png' %}"
+                alt="Wharton University logo"
+            />
+            <img
+                src="{% static 'images/tbx-logo.png' %}"
+                alt="Torchbox logo"
+            />
+        </div>
+        <div class="hero">
+            <div class="hero__image">
+                <img
+                    src="{% static 'images/wagtail-space-logo.png' %}"
+                    alt="Wagtail Space logo"
+                />
+            </div>
+            <h1 class="hero__title">
+                <span>Wagtail</span>
+                <span>{% include "svg/live.html" %}</span>
+                <span class="live">Live</span>
+            </h1>
+            <p class="hero__subtitle">
+                Join <a href="https://wagtailcms.slack.com/archives/C036C1K56VA" target="_blank">#wagtail-space-live</a> on wagtail slack to participate
+            </p>
+        </div>
+    </header>
+
+    {% include "wagtail_live/live_posts.html" %}
+    {% include "wagtail_live/websocket/django_channels.html" %}
+    {{ total_pages|json_script:"totalPages" }}
+{% endblock %}
